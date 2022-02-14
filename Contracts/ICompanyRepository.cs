@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Entities.Models;
 namespace Contracts
@@ -6,5 +7,6 @@ namespace Contracts
     {
 
         IEnumerable<Company> GetAllCompanies(bool trackChanges);
+        Company GetCompany(Guid companyId, bool trackChanges);
     }
 }
