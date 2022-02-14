@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using CompanyEmployees.Wrappers;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
@@ -36,7 +37,7 @@ namespace CompanyEmployees.Controllers
             // }).ToList();
 
             var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
-            return Ok(companiesDto);
+            return Ok(new Response<IEnumerable<CompanyDto>>(companiesDto));
         }
 
         [HttpGet("{id}", Name = "CompanyById")]
