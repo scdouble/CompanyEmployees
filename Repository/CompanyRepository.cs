@@ -22,5 +22,10 @@ namespace Repository
         {
             return FindByCondition(company => company.Id.Equals(companyId), trackChanges).SingleOrDefault();
         }
+
+        public void CreateCompany(Company company)
+        {
+            Create(company);
+        }
     }
 }
