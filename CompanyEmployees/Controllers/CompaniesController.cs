@@ -26,25 +26,16 @@ namespace CompanyEmployees.Controllers
         [HttpGet]
         public IActionResult GetCompanies()
         {
-            try
-            {
-                var companies = _repository.Company.GetAllCompanies(trackChanges: false);
-                // var companiesDto = companies.Select(com => new CompanyDto
-                // {
-                //     Id = com.Id,
-                //     Name = com.Name,
-                //     FullAddress = string.Join(' ', com.Address, com.Country)
-                // }).ToList();
+            var companies = _repository.Company.GetAllCompanies(trackChanges: false);
+            // var companiesDto = companies.Select(com => new CompanyDto
+            // {
+            //     Id = com.Id,
+            //     Name = com.Name,
+            //     FullAddress = string.Join(' ', com.Address, com.Country)
+            // }).ToList();
 
-                var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
-
-                return Ok(companiesDto);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetCompanies)} action {e}");
-                return StatusCode(500, "Internal server error");
-            }
+            var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
+            return Ok(companiesDto);
         }
     }
 }
