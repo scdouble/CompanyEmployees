@@ -7,6 +7,7 @@ using Entities;
 using Entities.Models;
 using Entities.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 
 namespace Repository
 {
@@ -24,6 +25,8 @@ namespace Repository
                         employee => employee.CompanyId.Equals(companyId) &&
                                     (employee.Age >= employeeParameters.MinAge &&
                                      employee.Age <= employeeParameters.MaxAge), trackChanges)
+                    .FilterEmployees(employeeParameters.MinAge, employeeParameters.MaxAge)
+                    .Search(employeeParameters.SearchTerm)
                     .OrderBy(e => e.Name)
                     .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
                     .Take(employeeParameters.PageSize)
