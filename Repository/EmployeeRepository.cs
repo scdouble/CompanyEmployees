@@ -19,15 +19,20 @@ namespace Repository
         public async Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId,
             EmployeeParameters employeeParameters, bool trackChanges)
         {
-            var employees = await FindByCondition(employee => employee.CompanyId.Equals(companyId), trackChanges)
-                .OrderBy(e => e.Name)
-                .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize) 
-                .Take(employeeParameters.PageSize)
-                .ToListAsync();
+            var employees =
+                await FindByCondition(
+                        employee => employee.CompanyId.Equals(companyId) &&
+                                    (employee.Age >= employeeParameters.MinAge &&
+                                     employee.Age <= employeeParameters.MaxAge), trackChanges)
+                    .OrderBy(e => e.Name)
+                    .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
+                    .Take(employeeParameters.PageSize)
+                    .ToListAsync();
 
             var count = await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges).CountAsync();
-            
-            return PagedList<Employee>.ToPagedList(employees, employeeParameters.PageNumber, employeeParameters.PageSize,count);
+
+            return PagedList<Employee>.ToPagedList(employees, employeeParameters.PageNumber,
+                employeeParameters.PageSize, count);
         }
 
         public async Task<Employee> GetEmployeeAsync(Guid companyId, Guid id, bool trackChanges)
