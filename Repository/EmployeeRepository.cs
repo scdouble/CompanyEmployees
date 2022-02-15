@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Contracts;
 using Entities;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository
@@ -15,17 +16,23 @@ namespace Repository
         {
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId, bool trackChanges)
+        public async Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId,
+            EmployeeParameters employeeParameters, bool trackChanges)
         {
-            return FindByCondition(employee => employee.CompanyId
-                    .Equals(companyId), trackChanges)
-                .OrderBy(e => e.Name);
+            var employees = await FindByCondition(employee => employee.CompanyId.Equals(companyId), trackChanges)
+                .OrderBy(e => e.Name)
+                .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize) 
+                .Take(employeeParameters.PageSize)
+                .ToListAsync();
+
+            var count = await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges).CountAsync();
+            
+            return PagedList<Employee>.ToPagedList(employees, employeeParameters.PageNumber, employeeParameters.PageSize,count);
         }
 
         public async Task<Employee> GetEmployeeAsync(Guid companyId, Guid id, bool trackChanges)
         {
-            return await FindByCondition(emp => emp.CompanyId.Equals(companyId)
-                                          && emp.Id.Equals(id), trackChanges)
+            return await FindByCondition(emp => emp.CompanyId.Equals(companyId) && emp.Id.Equals(id), trackChanges)
                 .SingleOrDefaultAsync();
         }
 
