@@ -38,7 +38,8 @@ namespace CompanyEmployees.Controllers
             // }).ToList();
 
             var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
-            return Ok(new Response<IEnumerable<CompanyDto>>(companiesDto));
+           // return Ok(new Response<IEnumerable<CompanyDto>>(companiesDto));
+           return Ok(companiesDto);
 
         }
 

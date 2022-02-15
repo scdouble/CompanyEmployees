@@ -21,11 +21,11 @@ namespace Repository
         {
             if (trackChanges)
             {
-                return RepositoryContext.Set<T>().AsNoTracking();
+                return RepositoryContext.Set<T>();
             }
             else
             {
-                return RepositoryContext.Set<T>();
+                return RepositoryContext.Set<T>().AsNoTracking();
             }
         }
 
@@ -34,12 +34,11 @@ namespace Repository
             if (trackChanges)
             {
                 return RepositoryContext.Set<T>()
-                    .Where(expression)
-                    .AsNoTracking();
+                        .Where(expression);
             }
             else
             {
-                return RepositoryContext.Set<T>().Where(expression);
+                return RepositoryContext.Set<T>().Where(expression).AsNoTracking();
             }
         }
 
