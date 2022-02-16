@@ -9,6 +9,7 @@ using CompanyEmployees.ModelBinders;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyEmployees.Controllers
@@ -45,6 +46,10 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpGet("{id}", Name = "CompanyById")]
+        // [ResponseCache(Duration = 60)]
+       // [ResponseCache(CacheProfileName = "120SecondsDuration")]
+        [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 60)] 
+        [HttpCacheValidation(MustRevalidate = false)]
         public async Task<IActionResult> GetCompany(Guid id)
         {
             var company = await _repository.Company.GetCompanyAsync(id, trackChanges: false);

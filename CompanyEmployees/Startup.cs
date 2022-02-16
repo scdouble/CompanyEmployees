@@ -40,14 +40,17 @@ namespace CompanyEmployees
             services.ConfigureLoggerService();
             services.ConfigureSqlContext(Configuration);
             services.ConfigureRepositoryManager();
+            services.ConfigureResponseCaching();
+            services.ConfigureHttpCacheHeaders();
             services.AddAutoMapper(typeof(Startup));
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
             services.AddControllers(config =>
                 {
                     config.RespectBrowserAcceptHeader = true;
                     config.ReturnHttpNotAcceptable = true;
+                    config.CacheProfiles.Add("120SecondsDuration", new CacheProfile(){Duration = 120});
                 }).AddNewtonsoftJson()
-                .AddXmlDataContractSerializerFormatters()
+               // .AddXmlDataContractSerializerFormatters()
                 .AddCustomCSVFormatter();
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<ValidateCompanyExistsAttribute>();
@@ -74,6 +77,8 @@ namespace CompanyEmployees
                 }
             );
 
+            app.UseResponseCaching();
+            app.UseHttpCacheHeaders();
             app.UseRouting();
 
             app.UseAuthorization();
