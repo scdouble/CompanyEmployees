@@ -19,7 +19,6 @@ namespace Entities.RequestFeatures
             };
             AddRange(items);
         }
-
         public static PagedList<T> ToPagedList(IEnumerable<T> source, int pageNumber, int pageSize , int totalCount)
         {
             // var count = source.Count(); 

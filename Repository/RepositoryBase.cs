@@ -33,8 +33,7 @@ namespace Repository
         {
             if (trackChanges)
             {
-                return RepositoryContext.Set<T>()
-                        .Where(expression);
+                return RepositoryContext.Set<T>().Where(expression);
             }
             else
             {

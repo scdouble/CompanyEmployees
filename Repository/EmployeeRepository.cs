@@ -21,13 +21,11 @@ namespace Repository
             EmployeeParameters employeeParameters, bool trackChanges)
         {
             var employees =
-                await FindByCondition(
-                        employee => employee.CompanyId.Equals(companyId) &&
-                                    (employee.Age >= employeeParameters.MinAge &&
-                                     employee.Age <= employeeParameters.MaxAge), trackChanges)
+                await FindByCondition(employee => employee.CompanyId.Equals(companyId), trackChanges)
                     .FilterEmployees(employeeParameters.MinAge, employeeParameters.MaxAge)
                     .Search(employeeParameters.SearchTerm)
-                    .OrderBy(e => e.Name)
+                    .Sort(employeeParameters.OrderBy)
+                   // .OrderBy(e => e.Name)
                     .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
                     .Take(employeeParameters.PageSize)
                     .ToListAsync();
