@@ -42,6 +42,10 @@ namespace CompanyEmployees
             services.ConfigureRepositoryManager();
             services.ConfigureResponseCaching();
             services.ConfigureHttpCacheHeaders();
+            services.AddAuthentication();
+            services.ConfigureJWT(Configuration);
+            services.ConfigureIdentity();
+            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
             services.AddAutoMapper(typeof(Startup));
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
             services.AddControllers(config =>
@@ -81,6 +85,7 @@ namespace CompanyEmployees
             app.UseHttpCacheHeaders();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
